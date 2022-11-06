@@ -34,6 +34,16 @@ from sklearn.metrics import classification_report, accuracy_score
 import pickle
 
 def load_data(database_filepath):
+    """ Load data from the previously created database of cleaned data.
+
+    Args :
+        Database filepath
+
+    Returns :
+        X (messages, input), Y (categories, output), categories (column names)
+    
+    """
+
     # load data from database
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df = pd.read_sql_table(database_filepath, engine)
@@ -43,6 +53,17 @@ def load_data(database_filepath):
     return X, Y, Y.columns
 
 def tokenize(text):
+    """ Messages cleaning, including case normalization, punctuation and stop words removal, 
+    tokenization and lemmatization.
+
+    Args :
+        Individual message
+
+    Returns :
+        List of cleaned tokens
+    
+    """
+
     stop_words = stopwords.words("english")
     lemmatizer = WordNetLemmatizer()
     
@@ -59,6 +80,12 @@ def tokenize(text):
     # adapted from the lesson on Udacity NLP pipeline
 
 def build_model():
+    """ Defining the pipeline and grid search parameter.
+
+    The pipeline includes count vectorization, TF-IDF transformer, and random forest classifier.
+    
+    """
+
     pipeline = Pipeline([
         ('countvect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer(smooth_idf=False)),
@@ -77,6 +104,15 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """ Testing the trained model.
+
+    Args :
+        Fitted model (Pipeline), X_test (numpy array), Y_test (numpy array), category_names (list) 
+
+    Predict the data based on fitted model, and print the accuracy and metric scores
+    
+    """
+
     # testing of the model
     y_pred = model.predict(X_test)
 
@@ -87,6 +123,13 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
         
 def save_model(model, model_filepath):
+    """ Exporting the model as pickle file for use in web app.
+
+    Args :
+        model (Pipeline), model_filepath (str)
+    
+    """
+
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
