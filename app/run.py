@@ -48,7 +48,7 @@ def index():
     top_categories = df.sum(axis=0)[4:].sort_values(ascending=False)[:5]
     
     # visuals for genre distribution
-    graphs_1 = {
+    graphs = [{
             'data': [
                 Bar(
                     x=genre_names,
@@ -65,11 +65,9 @@ def index():
                     'title': "Genre"
                 }
             }
-        }
-
-    
+        },  
     # visuals for genre distribution
-    graphs_2 = {
+        {
             'data': [
                 Bar(
                     x=list(top_categories.index),
@@ -87,9 +85,7 @@ def index():
                 }
             }
         }
-        
-    
-    graphs = [graphs_1, graphs_2]
+    ]    
     
     # encode plotly graphs in JSON
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]

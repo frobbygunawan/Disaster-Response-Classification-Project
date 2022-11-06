@@ -24,12 +24,8 @@ def clean_data(df):
     row = categories.iloc[0,:]
 
     # use this row to extract a list of new column names for categories.
-    # one way is to apply a lambda function that takes everything 
-    # up to the second to last character of each string with slicing
-    category_colnames = row.str[:-2].values.tolist()
-
     # rename the columns of `categories`
-    categories.columns = category_colnames
+    categories.columns = row.str[:-2].values.tolist()
 
     # convert category values to just zeros and ones
     for column in categories:
