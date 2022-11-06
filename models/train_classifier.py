@@ -26,7 +26,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score
@@ -71,15 +70,17 @@ def build_model():
         'classifier__estimator__min_samples_split': [2, 4]
     }
 
+    # the parameters for grid search are intentionally limited to avoid longer training time
     cv = GridSearchCV(pipeline, param_grid=parameters, n_jobs=-1)
     
     return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-
+    # testing of the model
     y_pred = model.predict(X_test)
 
+    # accuracy and metrics of model prediction printed to console
     for i, each_column in enumerate(category_names):
         print("Category : {}, accuracy : {}".format(each_column, accuracy_score(Y_test[each_column], y_pred[:,i], normalize=True)))
         print(classification_report(Y_test[each_column], y_pred[:,i]))
